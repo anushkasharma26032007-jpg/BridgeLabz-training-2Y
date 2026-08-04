@@ -1,0 +1,23 @@
+import java.util.Scanner;
+public class ElectricityBill{
+public static void main(String [] args){
+Scanner sc= new Scanner(System.in);
+
+System.out.print("Electricity units:"); 
+int u=sc.nextInt();
+
+double bill;
+if(u<=100){
+bill =unit*5;
+}
+else if(u<=200){
+bill=(100*5)+((u-100)*7);
+}
+else {
+bill = (100*5)+(100*7)+((u-200)*10);
+}
+System.out.println("Electricty Bill ="+bill);
+sc.close();
+}
+}
+
