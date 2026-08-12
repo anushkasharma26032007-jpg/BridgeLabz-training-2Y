@@ -1,0 +1,25 @@
+import java.util.Scanner;
+class main{
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);       
+        String s = sc.nextLine();
+        int UpperCase = 0;
+        int  LowerCase = 0;
+        int Digit = 0;
+        for(int i=0;i<s.length();i++){
+            char ch = s.charAt(i);
+            if(Character.isUpperCase(ch)){
+                UpperCase++;
+            }else if(Character.isLowerCase(ch)){
+                LowerCase++;
+            }else{
+                if(Character.isDigit(ch)){
+                Digit++;
+                }
+            }
+        }
+        System.out.println("Upper Case : "+UpperCase);
+        System.out.println("Lower Case : "+LowerCase);
+        System.out.println("Digits : "+Digit);   
+    }
+}
