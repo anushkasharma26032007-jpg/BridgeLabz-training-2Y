@@ -1,0 +1,11 @@
+//hashset(unoredred pair)
+import java.util.HashSet;
+public static void main(String[] args){
+HashSet<Integer> set = new HAshSet<>();
+set.add(77);set.add(89);set.add(99);
+System.out.println(set.size());
+System.out.println(set.contains(77));
+set.remove(89);
+System.out.println(set);
+}
+}
