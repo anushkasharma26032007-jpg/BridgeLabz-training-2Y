@@ -1,0 +1,27 @@
+import java.util.Scanner;
+class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+     int n= sc.nextInt();
+        int target = sc.nextInt();
+        int [] a = new int[n];
+        for(int i=0;i<n;i++){
+            a[i]= sc.nextInt();
+        }
+         int left =0;
+        int sum=0;
+        int minlen = n+1;
+        for(int right = 0; right < n; right++) {
+            sum = sum+a[right];
+            while(sum>=target){
+                minlen = Math.min(minlen, right - left + 1);
+                sum = sum - a[left];
+                left++;
+            }
+        }
+        if(minlen == n + 1)
+    System.out.println(0);
+   else
+    System.out.println(minlen);
+    }
+}
