@@ -1,0 +1,34 @@
+class Solution {
+    public long maximumSubarraySum(int[] nums, int k) {
+
+        HashSet<Integer> set = new HashSet<>();
+        long sum = 0;
+        long maxsum = 0;
+
+        for (int right = 0; right < nums.length; right++) {
+
+            // Duplicate hai to left ko aage move karo
+            while (set.contains(nums[right])) {
+                set.remove(nums[left]);
+                sum -= nums[left];
+                left++;
+            }
+
+            // Naya element add
+            set.add(nums[right]);
+            sum += nums[right];
+
+            // Window size k ho gayi
+            if (right - left + 1 == k) {
+                maxsum = Math.max(maxsum, sum);
+
+                // Next window ke liye left element hatao
+                set.remove(nums[left]);
+                sum -= nums[left];
+                left++;
+            }
+        }
+
+        return maxsum;
+    }
+}
