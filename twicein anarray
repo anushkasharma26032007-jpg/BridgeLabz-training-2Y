@@ -1,0 +1,20 @@
+import java.util.*;
+class main{
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int k  = sc.nextInt();
+        int []a = new int[n];
+        for(int i=0;i<n;i++){
+            a[i]= sc.nextInt();
+        }
+        for(int i =0;i<n;i++){
+            HashSet <Integer> set = new HashSet<>();
+            if(set.contains(a[i])){
+                System.out.print(a[i]+" ");
+            }else{
+                set.add(a[i]);
+            }
+        }
+    }
+}
