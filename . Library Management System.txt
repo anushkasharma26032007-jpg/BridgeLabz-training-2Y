@@ -1,0 +1,199 @@
+
+class Main {
+
+    static class Node {
+        String title, author, genre;
+        int id;
+        boolean available;
+        Node next, prev;
+
+        Node(String title, String author, String genre, int id, boolean available) {
+            this.title = title;
+            this.author = author;
+            this.genre = genre;
+            this.id = id;
+            this.available = available;
+        }
+    }
+
+    static Node head = null;
+    static Node tail = null;
+
+    static void insertAtBeginning(String title, String author, String genre,
+                                  int id, boolean available) {
+        Node newNode = new Node(title, author, genre, id, available);
+
+        if (head == null) {
+            head = tail = newNode;
+            return;
+        }
+
+        newNode.next = head;
+        head.prev = newNode;
+        head = newNode;
+    }
+
+    static void insertAtEnd(String title, String author, String genre,
+                            int id, boolean available) {
+        Node newNode = new Node(title, author, genre, id, available);
+
+        if (head == null) {
+            head = tail = newNode;
+            return;
+        }
+
+        tail.next = newNode;
+        newNode.prev = tail;
+        tail = newNode;
+    }
+
+    static void insertAtPosition(String title, String author, String genre,
+                                 int id, boolean available, int pos) {
+        if (pos == 1) {
+            insertAtBeginning(title, author, genre, id, available);
+            return;
+        }
+
+        Node temp = head;
+
+        for (int i = 1; i < pos - 1 && temp != null; i++) {
+            temp = temp.next;
+        }
+
+        if (temp == null) return;
+
+        if (temp == tail) {
+            insertAtEnd(title, author, genre, id, available);
+            return;
+        }
+
+        Node newNode = new Node(title, author, genre, id, available);
+
+        newNode.next = temp.next;
+        newNode.prev = temp;
+        temp.next.prev = newNode;
+        temp.next = newNode;
+    }
+
+    static void deleteBook(int id) {
+        Node temp = head;
+
+        while (temp != null) {
+            if (temp.id == id) {
+
+                if (temp == head) {
+                    head = head.next;
+                } else {
+                    temp.prev.next = temp.next;
+                }
+
+                if (temp == tail) {
+                    tail = tail.prev;
+                } else {
+                    temp.next.prev = temp.prev;
+                }
+
+                if (head != null) head.prev = null;
+                if (tail != null) tail.next = null;
+
+                return;
+            }
+
+            temp = temp.next;
+        }
+
+        System.out.println("Book not found");
+    }
+
+    static void searchBook(String name) {
+        Node temp = head;
+
+        while (temp != null) {
+            if (temp.title.equalsIgnoreCase(name) ||
+                temp.author.equalsIgnoreCase(name)) {
+
+                System.out.println(temp.title + " " + temp.author);
+                return;
+            }
+
+            temp = temp.next;
+        }
+
+        System.out.println("Book not found");
+    }
+
+    static void updateAvailability(int id, boolean status) {
+        Node temp = head;
+
+        while (temp != null) {
+            if (temp.id == id) {
+                temp.available = status;
+                return;
+            }
+
+            temp = temp.next;
+        }
+
+        System.out.println("Book not found");
+    }
+
+    static void displayForward() {
+        Node temp = head;
+
+        while (temp != null) {
+            System.out.println(temp.id + " " + temp.title + " "
+                    + temp.author + " " + temp.genre + " " + temp.available);
+
+            temp = temp.next;
+        }
+    }
+
+    static void displayReverse() {
+        Node temp = tail;
+
+        while (temp != null) {
+            System.out.println(temp.id + " " + temp.title);
+
+            temp = temp.prev;
+        }
+    }
+
+    static void countBooks() {
+        int count = 0;
+        Node temp = head;
+
+        while (temp != null) {
+            count++;
+            temp = temp.next;
+        }
+
+        System.out.println("Total Books: " + count);
+    }
+
+    public static void main(String[] args) {
+
+        insertAtEnd("Java", "James", "Programming", 101, true);
+        insertAtEnd("DSA", "Mark", "Education", 102, true);
+        insertAtBeginning("Python", "Guido", "Programming", 103, false);
+
+        insertAtPosition("C++", "Bjarne", "Programming", 104, true, 2);
+
+        System.out.println("Books:");
+        displayForward();
+
+        System.out.println("\nSearch Book:");
+        searchBook("Java");
+
+        updateAvailability(102, false);
+
+        System.out.println("\nReverse Display:");
+        displayReverse();
+
+        System.out.println();
+        countBooks();
+
+        System.out.println("\nAfter Deletion:");
+        deleteBook(103);
+        displayForward();
+    }
+}

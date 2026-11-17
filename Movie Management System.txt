@@ -1,0 +1,199 @@
+
+class Main {
+
+    static class Node {
+        String title;
+        String director;
+        int year;
+        double rating;
+        Node prev, next;
+
+        Node(String title, String director, int year, double rating) {
+            this.title = title;
+            this.director = director;
+            this.year = year;
+            this.rating = rating;
+            this.prev = null;
+            this.next = null;
+        }
+    }
+
+    static Node head = null;
+    static Node tail = null;
+
+    static void insertAtBeginning(String title, String director, int year, double rating) {
+        Node newNode = new Node(title, director, year, rating);
+
+        if (head == null) {
+            head = tail = newNode;
+            return;
+        }
+
+        newNode.next = head;
+        head.prev = newNode;
+        head = newNode;
+    }
+
+    static void insertAtEnd(String title, String director, int year, double rating) {
+        Node newNode = new Node(title, director, year, rating);
+
+        if (head == null) {
+            head = tail = newNode;
+            return;
+        }
+
+        tail.next = newNode;
+        newNode.prev = tail;
+        tail = newNode;
+    }
+
+    static void insertAtPosition(String title, String director, int year, double rating, int pos) {
+        if (pos < 1) {
+            System.out.println("Invalid position");
+            return;
+        }
+
+        if (pos == 1) {
+            insertAtBeginning(title, director, year, rating);
+            return;
+        }
+
+        Node temp = head;
+
+        for (int i = 1; temp != null && i < pos - 1; i++) {
+            temp = temp.next;
+        }
+
+        if (temp == null) {
+            System.out.println("Invalid position");
+            return;
+        }
+
+        if (temp == tail) {
+            insertAtEnd(title, director, year, rating);
+            return;
+        }
+
+        Node newNode = new Node(title, director, year, rating);
+
+        newNode.next = temp.next;
+        newNode.prev = temp;
+
+        temp.next.prev = newNode;
+        temp.next = newNode;
+    }
+
+    static void removeMovie(String title) {
+        if (head == null) {
+            System.out.println("List is empty");
+            return;
+        }
+
+        Node temp = head;
+
+        while (temp != null && !temp.title.equalsIgnoreCase(title)) {
+            temp = temp.next;
+        }
+
+        if (temp == null) {
+            System.out.println("Movie not found");
+            return;
+        }
+
+        if (temp == head) {
+            head = head.next;
+        } else {
+            temp.prev.next = temp.next;
+        }
+
+        if (temp == tail) {
+            tail = tail.prev;
+        } else {
+            temp.next.prev = temp.prev;
+        }
+    }
+
+    static void searchMovie(String director, double rating) {
+        Node temp = head;
+        boolean found = false;
+
+        while (temp != null) {
+            if (temp.director.equalsIgnoreCase(director) || temp.rating == rating) {
+                displayMovie(temp);
+                found = true;
+            }
+
+            temp = temp.next;
+        }
+
+        if (!found) {
+            System.out.println("Movie not found");
+        }
+    }
+
+    static void updateRating(String title, double newRating) {
+        Node temp = head;
+
+        while (temp != null) {
+            if (temp.title.equalsIgnoreCase(title)) {
+                temp.rating = newRating;
+                System.out.println("Rating updated successfully");
+                return;
+            }
+
+            temp = temp.next;
+        }
+
+        System.out.println("Movie not found");
+    }
+
+    static void displayMovie(Node temp) {
+        System.out.println(temp.title + " | " + temp.director + " | "
+                + temp.year + " | " + temp.rating);
+    }
+
+    static void displayForward() {
+        Node temp = head;
+
+        while (temp != null) {
+            displayMovie(temp);
+            temp = temp.next;
+        }
+    }
+
+    static void displayReverse() {
+        Node temp = tail;
+
+        while (temp != null) {
+            displayMovie(temp);
+            temp = temp.prev;
+        }
+    }
+
+    public static void main(String[] args) {
+
+        insertAtEnd("3 Idiots", "Rajkumar Hirani", 2009, 8.4);
+        insertAtEnd("PK", "Rajkumar Hirani", 2014, 8.1);
+        insertAtBeginning("Dangal", "Nitesh Tiwari", 2016, 8.3);
+
+        insertAtPosition("Taare Zameen Par", "Aamir Khan", 2007, 8.4, 2);
+
+        System.out.println("Movies in Forward Order:");
+        displayForward();
+
+        System.out.println("\nMovies in Reverse Order:");
+        displayReverse();
+
+        System.out.println("\nSearching Movies:");
+        searchMovie("Rajkumar Hirani", 8.3);
+
+        System.out.println("\nUpdating Rating:");
+        updateRating("PK", 8.5);
+
+        System.out.println("\nRemoving Movie:");
+        removeMovie("Dangal");
+
+        System.out.println("\nFinal Movie List:");
+        displayForward();
+    }
+}

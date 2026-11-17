@@ -1,0 +1,173 @@
+
+class Main {
+
+    static class Node {
+        int id, priority;
+        String name, date;
+        Node next;
+
+        Node(int id, String name, int priority, String date) {
+            this.id = id;
+            this.name = name;
+            this.priority = priority;
+            this.date = date;
+        }
+    }
+
+    static Node head = null;
+
+    static void insertAtBeginning(int id, String name, int p, String date) {
+        Node newNode = new Node(id, name, p, date);
+
+        if (head == null) {
+            head = newNode;
+            newNode.next = head;
+            return;
+        }
+
+        Node temp = head;
+
+        while (temp.next != head) {
+            temp = temp.next;
+        }
+
+        newNode.next = head;
+        temp.next = newNode;
+        head = newNode;
+    }
+
+    static void insertAtEnd(int id, String name, int p, String date) {
+        Node newNode = new Node(id, name, p, date);
+
+        if (head == null) {
+            head = newNode;
+            newNode.next = head;
+            return;
+        }
+
+        Node temp = head;
+
+        while (temp.next != head) {
+            temp = temp.next;
+        }
+
+        temp.next = newNode;
+        newNode.next = head;
+    }
+
+    static void insertAtPosition(int id, String name, int p, String date, int pos) {
+        if (pos == 1) {
+            insertAtBeginning(id, name, p, date);
+            return;
+        }
+
+        Node temp = head;
+
+        for (int i = 1; i < pos - 1 && temp.next != head; i++) {
+            temp = temp.next;
+        }
+
+        Node newNode = new Node(id, name, p, date);
+
+        newNode.next = temp.next;
+        temp.next = newNode;
+    }
+
+    static void deleteTask(int id) {
+        if (head == null) return;
+
+        Node temp = head;
+        Node prev = null;
+
+        do {
+            if (temp.id == id) {
+                if (temp == head && temp.next == head) {
+                    head = null;
+                    return;
+                }
+
+                if (temp == head) {
+                    Node last = head;
+
+                    while (last.next != head) {
+                        last = last.next;
+                    }
+
+                    head = head.next;
+                    last.next = head;
+                } else {
+                    prev.next = temp.next;
+                }
+
+                return;
+            }
+
+            prev = temp;
+            temp = temp.next;
+
+        } while (temp != head);
+
+        System.out.println("Task not found");
+    }
+
+    static void viewTask() {
+        if (head == null) {
+            System.out.println("No task");
+            return;
+        }
+
+        System.out.println("Current Task: " + head.name);
+        head = head.next;
+    }
+
+    static void display() {
+        if (head == null) return;
+
+        Node temp = head;
+
+        do {
+            System.out.println(temp.id + " " + temp.name + " "
+                    + temp.priority + " " + temp.date);
+
+            temp = temp.next;
+
+        } while (temp != head);
+    }
+
+    static void search(int p) {
+        if (head == null) return;
+
+        Node temp = head;
+
+        do {
+            if (temp.priority == p) {
+                System.out.println(temp.name);
+            }
+
+            temp = temp.next;
+
+        } while (temp != head);
+    }
+
+    public static void main(String[] args) {
+
+        insertAtEnd(1, "Java", 1, "20-11-2026");
+        insertAtEnd(2, "DSA", 2, "21-11-2026");
+        insertAtBeginning(3, "Assignment", 1, "22-11-2026");
+
+        insertAtPosition(4, "Practice", 3, "23-11-2026", 2);
+
+        System.out.println("All Tasks:");
+        display();
+
+        System.out.println("\nCurrent Task:");
+        viewTask();
+
+        System.out.println("\nPriority 1 Tasks:");
+        search(1);
+
+        System.out.println("\nAfter Deletion:");
+        deleteTask(2);
+        display();
+    }
+}

@@ -1,0 +1,134 @@
+class Main {
+
+    static class Node {
+        int id;
+        String customer, movie, seat, time;
+        Node next;
+
+        Node(int id, String customer, String movie, String seat, String time) {
+            this.id = id;
+            this.customer = customer;
+            this.movie = movie;
+            this.seat = seat;
+            this.time = time;
+        }
+    }
+
+    static Node head = null;
+    static Node tail = null;
+
+    static void bookTicket(int id, String customer, String movie, String seat, String time) {
+        Node newNode = new Node(id, customer, movie, seat, time);
+
+        if (head == null) {
+            head = tail = newNode;
+            tail.next = head;
+        } else {
+            tail.next = newNode;
+            tail = newNode;
+            tail.next = head;
+        }
+    }
+
+    static void cancelTicket(int id) {
+        if (head == null) {
+            return;
+        }
+
+        if (head.id == id) {
+            if (head == tail) {
+                head = tail = null;
+            } else {
+                head = head.next;
+                tail.next = head;
+            }
+            return;
+        }
+
+        Node temp = head;
+
+        while (temp.next != head && temp.next.id != id) {
+            temp = temp.next;
+        }
+
+        if (temp.next != head) {
+            if (temp.next == tail) {
+                tail = temp;
+            }
+
+            temp.next = temp.next.next;
+            tail.next = head;
+        }
+    }
+
+    static void searchTicket(String name) {
+        if (head == null) {
+            System.out.println("No tickets");
+            return;
+        }
+
+        Node temp = head;
+
+        do {
+            if (temp.customer.equalsIgnoreCase(name) ||
+                temp.movie.equalsIgnoreCase(name)) {
+                System.out.println(temp.id + " " + temp.customer + " " + temp.movie);
+                return;
+            }
+
+            temp = temp.next;
+        } while (temp != head);
+
+        System.out.println("Ticket not found");
+    }
+
+    static void display() {
+        if (head == null) {
+            System.out.println("No tickets booked");
+            return;
+        }
+
+        Node temp = head;
+
+        do {
+            System.out.println(temp.id + " " + temp.customer + " " +
+                               temp.movie + " " + temp.seat + " " + temp.time);
+
+            temp = temp.next;
+        } while (temp != head);
+    }
+
+    static void countTickets() {
+        int count = 0;
+
+        if (head == null) {
+            System.out.println("Total Tickets: 0");
+            return;
+        }
+
+        Node temp = head;
+
+        do {
+            count++;
+            temp = temp.next;
+        } while (temp != head);
+
+        System.out.println("Total Tickets: " + count);
+    }
+
+    public static void main(String[] args) {
+        bookTicket(1, "Aman", "Avengers", "A1", "10 AM");
+        bookTicket(2, "Riya", "Jawan", "B2", "2 PM");
+        bookTicket(3, "Rahul", "Avengers", "C3", "6 PM");
+
+        display();
+
+        searchTicket("Aman");
+
+        cancelTicket(2);
+
+        display();
+
+        countTickets();
+    }
+}

@@ -1,0 +1,207 @@
+
+class Main {
+
+    static class Node {
+        String name;
+        int id, quantity;
+        double price;
+        Node next;
+
+        Node(String name, int id, int quantity, double price) {
+            this.name = name;
+            this.id = id;
+            this.quantity = quantity;
+            this.price = price;
+        }
+    }
+
+    static Node head = null;
+
+    static void insertAtBeginning(String name, int id, int qty, double price) {
+        Node newNode = new Node(name, id, qty, price);
+        newNode.next = head;
+        head = newNode;
+    }
+
+    static void insertAtEnd(String name, int id, int qty, double price) {
+        Node newNode = new Node(name, id, qty, price);
+
+        if (head == null) {
+            head = newNode;
+            return;
+        }
+
+        Node temp = head;
+
+        while (temp.next != null) {
+            temp = temp.next;
+        }
+
+        temp.next = newNode;
+    }
+
+    static void insertAtPosition(String name, int id, int qty, double price, int pos) {
+        if (pos <= 1) {
+            insertAtBeginning(name, id, qty, price);
+            return;
+        }
+
+        Node temp = head;
+
+        for (int i = 1; i < pos - 1 && temp.next != null; i++) {
+            temp = temp.next;
+        }
+
+        Node newNode = new Node(name, id, qty, price);
+        newNode.next = temp.next;
+        temp.next = newNode;
+    }
+
+    static void deleteItem(int id) {
+        if (head == null) return;
+
+        if (head.id == id) {
+            head = head.next;
+            return;
+        }
+
+        Node temp = head;
+
+        while (temp.next != null) {
+            if (temp.next.id == id) {
+                temp.next = temp.next.next;
+                return;
+            }
+            temp = temp.next;
+        }
+
+        System.out.println("Item not found");
+    }
+
+    static void updateQuantity(int id, int qty) {
+        Node temp = head;
+
+        while (temp != null) {
+            if (temp.id == id) {
+                temp.quantity = qty;
+                return;
+            }
+            temp = temp.next;
+        }
+
+        System.out.println("Item not found");
+    }
+
+    static void searchById(int id) {
+        Node temp = head;
+
+        while (temp != null) {
+            if (temp.id == id) {
+                System.out.println(temp.name + " " + temp.price);
+                return;
+            }
+            temp = temp.next;
+        }
+
+        System.out.println("Item not found");
+    }
+
+    static void searchByName(String name) {
+        Node temp = head;
+
+        while (temp != null) {
+            if (temp.name.equalsIgnoreCase(name)) {
+                System.out.println(temp.id + " " + temp.price);
+                return;
+            }
+            temp = temp.next;
+        }
+
+        System.out.println("Item not found");
+    }
+
+    static void totalValue() {
+        double total = 0;
+        Node temp = head;
+
+        while (temp != null) {
+            total = total + temp.price * temp.quantity;
+            temp = temp.next;
+        }
+
+        System.out.println("Total Inventory Value: " + total);
+    }
+
+    static void sortByName(boolean ascending) {
+        for (Node i = head; i != null; i = i.next) {
+            for (Node j = i.next; j != null; j = j.next) {
+                int result = i.name.compareToIgnoreCase(j.name);
+
+                if ((ascending && result > 0) || (!ascending && result < 0)) {
+                    String name = i.name;
+                    i.name = j.name;
+                    j.name = name;
+                }
+            }
+        }
+    }
+
+    static void sortByPrice(boolean ascending) {
+        for (Node i = head; i != null; i = i.next) {
+            for (Node j = i.next; j != null; j = j.next) {
+                if ((ascending && i.price > j.price) ||
+                    (!ascending && i.price < j.price)) {
+
+                    double price = i.price;
+                    i.price = j.price;
+                    j.price = price;
+                }
+            }
+        }
+    }
+
+    static void display() {
+        Node temp = head;
+
+        while (temp != null) {
+            System.out.println(temp.name + " " + temp.id + " "
+                    + temp.quantity + " " + temp.price);
+
+            temp = temp.next;
+        }
+    }
+
+    public static void main(String[] args) {
+
+        insertAtEnd("Laptop", 101, 5, 50000);
+        insertAtEnd("Mouse", 102, 10, 500);
+        insertAtBeginning("Keyboard", 103, 4, 1000);
+        insertAtPosition("Monitor", 104, 3, 8000, 2);
+
+        System.out.println("Inventory:");
+        display();
+
+        System.out.println("\nSearch by ID:");
+        searchById(101);
+
+        System.out.println("\nSearch by Name:");
+        searchByName("Mouse");
+
+        updateQuantity(102, 20);
+
+        System.out.println("\nTotal Value:");
+        totalValue();
+
+        System.out.println("\nSorted by Name:");
+        sortByName(true);
+        display();
+
+        System.out.println("\nSorted by Price:");
+        sortByPrice(true);
+        display();
+
+        System.out.println("\nAfter Deletion:");
+        deleteItem(103);
+        display();
+    }
+}

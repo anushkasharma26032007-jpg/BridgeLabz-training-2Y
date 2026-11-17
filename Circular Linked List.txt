@@ -1,0 +1,103 @@
+class Main {
+
+    static class Node {
+        int id, burst, remaining, priority;
+        Node next;
+
+        Node(int id, int burst, int priority) {
+            this.id = id;
+            this.burst = burst;
+            this.remaining = burst;
+            this.priority = priority;
+        }
+    }
+
+    static Node head = null;
+    static Node tail = null;
+
+    static void addProcess(int id, int burst, int priority) {
+        Node newNode = new Node(id, burst, priority);
+
+        if (head == null) {
+            head = tail = newNode;
+            tail.next = head;
+        } else {
+            tail.next = newNode;
+            tail = newNode;
+            tail.next = head;
+        }
+    }
+
+    static void display() {
+        if (head == null) {
+            System.out.println("No processes left");
+            return;
+        }
+
+        Node temp = head;
+
+        do {
+            System.out.print("P" + temp.id + "(" + temp.remaining + ") -> ");
+            temp = temp.next;
+        } while (temp != head);
+
+        System.out.println();
+    }
+
+    static void schedule(int quantum) {
+        int time = 0;
+        int totalWaiting = 0;
+        int totalTurnaround = 0;
+        int count = 0;
+
+        Node temp = head;
+
+        if (head == null) {
+            return;
+        }
+
+        do {
+            count++;
+            temp = temp.next;
+        } while (temp != head);
+
+        while (head != null) {
+            Node current = head;
+
+            if (current.remaining > quantum) {
+                current.remaining -= quantum;
+                time += quantum;
+
+                head = head.next;
+                tail.next = current;
+                tail = current;
+                tail.next = head;
+            } else {
+                time += current.remaining;
+
+                totalTurnaround += time;
+                totalWaiting += time - current.burst;
+
+                if (head == tail) {
+                    head = tail = null;
+                } else {
+                    head = head.next;
+                    tail.next = head;
+                }
+            }
+
+            display();
+        }
+
+        System.out.println("Average Waiting Time: " + (double) totalWaiting / count);
+        System.out.println("Average Turnaround Time: " + (double) totalTurnaround / count);
+    }
+
+    public static void main(String[] args) {
+        addProcess(1, 5, 1);
+        addProcess(2, 3, 2);
+        addProcess(3, 6, 1);
+
+        schedule(2);
+    }
+}

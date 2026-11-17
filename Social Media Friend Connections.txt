@@ -1,0 +1,107 @@
+class Main {
+
+    static class Node {
+        int id;
+        String name;
+        int age;
+        Node next;
+
+        Node(int id, String name, int age) {
+            this.id = id;
+            this.name = name;
+            this.age = age;
+            this.next = null;
+        }
+    }
+
+    static Node head = null;
+
+    static void addFriend(int id, String name, int age) {
+        Node newNode = new Node(id, name, age);
+
+        if (head == null) {
+            head = newNode;
+        } else {
+            Node temp = head;
+
+            while (temp.next != null) {
+                temp = temp.next;
+            }
+
+            temp.next = newNode;
+        }
+    }
+
+    static void removeFriend(int id) {
+        if (head == null) {
+            return;
+        }
+
+        if (head.id == id) {
+            head = head.next;
+            return;
+        }
+
+        Node temp = head;
+
+        while (temp.next != null && temp.next.id != id) {
+            temp = temp.next;
+        }
+
+        if (temp.next != null) {
+            temp.next = temp.next.next;
+        }
+    }
+
+    static void searchFriend(int id) {
+        Node temp = head;
+
+        while (temp != null) {
+            if (temp.id == id) {
+                System.out.println(temp.name + " found");
+                return;
+            }
+
+            temp = temp.next;
+        }
+
+        System.out.println("Friend not found");
+    }
+
+    static void display() {
+        Node temp = head;
+
+        while (temp != null) {
+            System.out.println(temp.id + " " + temp.name + " " + temp.age);
+            temp = temp.next;
+        }
+    }
+
+    static void countFriends() {
+        int count = 0;
+        Node temp = head;
+
+        while (temp != null) {
+            count++;
+            temp = temp.next;
+        }
+
+        System.out.println("Total Friends: " + count);
+    }
+
+    public static void main(String[] args) {
+        addFriend(1, "Aman", 20);
+        addFriend(2, "Riya", 19);
+        addFriend(3, "Rahul", 21);
+
+        display();
+
+        searchFriend(2);
+
+        removeFriend(1);
+
+        display();
+
+        countFriends();
+    }
+}
